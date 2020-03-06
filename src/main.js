@@ -1,8 +1,31 @@
+import './scss/main.scss'
+import '@mdi/font/css/materialdesignicons.css'
+
 import Vue from 'vue'
+import Buefy from 'buefy'
+
+import router from './routes'
+import store from './stores'
+
+/* Vue. Main component */
 import App from './App.vue'
 
-Vue.config.productionTip = false
+/* Vue. Component in recursion */
+import AsideMenuList from './components/AsideMenuList'
+
+/* Collapse mobile aside menu on route change */
+router.afterEach(() => {
+    //store.commit('asideMobileStateToggle', false)
+});
+
+Vue.config.productionTip = false;
+
+Vue.component('AsideMenuList', AsideMenuList);
+
+Vue.use(Buefy);
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app');

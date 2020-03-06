@@ -1,28 +1,53 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <nav-bar/>
+    <aside-menu :menu="menu"/>
+    <router-view/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+  import NavBar from './components/NavBar'
+  import AsideMenu from './components/AsideMenu'
 
 export default {
-  name: 'App',
+  name: 'home',
   components: {
-    HelloWorld
+    AsideMenu,
+    NavBar
+  },
+  computed: {
+    menu () {
+      return [
+        'Geral',
+        [
+          {
+            to: '/',
+            icon: 'desktop-mac',
+            label: 'Dashboard'
+          },
+          {
+            to: '/customers',
+            label: 'Clientes',
+            icon: 'account'
+          },
+          {
+            to: '/orders',
+            label: 'Pedidos',
+            icon: 'cart-minus',
+            updateMark: true
+          },
+        ]
+      ]
+    }
+  },
+  created () {
+    this.$store.commit('user', {
+      name: 'Pecheche',
+      email: 'john@example.com',
+      avatar: 'persona.jpg'
+    })
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
