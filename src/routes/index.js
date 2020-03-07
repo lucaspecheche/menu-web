@@ -17,9 +17,10 @@ export default new Router({
       component: () => import('../views/NewCustomer')
     },
     {
-      path: '/customers/edit',
+      path: '/customers/:id',
       name: 'customer.edit',
-      component: () => import('../views/ListCustomers')
+      props: true,
+      component: () => import('../views/EditCustomer')
     }
   ],
   scrollBehavior (to, from, savedPosition) {

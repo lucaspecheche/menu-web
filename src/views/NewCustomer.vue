@@ -1,47 +1,80 @@
 <template>
     <div>
         <section class="section is-main-section">
-            <tiles>
             <card-component title="Novo Cliente" icon="account-plus" class="tile is-child">
-                <form >
-                    <b-field horizontal label="Nome" message="Required. Your name">
-                        <b-input name="name" required/>
+                <form @submit.prevent="save">
+                    <b-field grouped>
+                        <b-field label="Nome" expanded>
+                            <b-input v-model="form.firstName" icon="account" type="text" placeholder="Lucas" name="name" required />
+                        </b-field>
+
+                        <b-field label="Sobrenome" expanded>
+                            <b-input v-model="form.lastName" icon="account" type="text" placeholder="Lima" name="email" required />
+                        </b-field>
+
                     </b-field>
-                    <b-field horizontal label="Sobrenome" message="Required. Your name">
-                        <b-input name="name" required/>
+
+                    <b-field label="E-mail" expanded="">
+                        <b-input v-model="form.email" icon="email" type="email" placeholder="menu@mail.com" name="email" required />
                     </b-field>
-                    <b-field horizontal label="E-mail" message="Required. Your e-mail">
-                        <b-input  name="email" type="email" required/>
-                    </b-field>
+
                     <hr>
-                    <b-field horizontal>
+                    <b-field grouped position="is-right">
                         <div class="control">
-                            <button type="submit" class="button is-primary" :class="{'is-loading':isLoading}">
-                                Submit
-                            </button>
+                            <b-button tag="router-link" to="/customers" type="is-light" icon-left="account-cancel" >
+                                Cancelar
+                            </b-button>
+                        </div>
+                        <div class="control">
+                            <b-button native-type="submit" type="is-link" icon-left="content-save" >
+                                Salvar
+                            </b-button>
                         </div>
                     </b-field>
                 </form>
             </card-component>
-
-            </tiles>
         </section>
     </div>
 </template>
 
 <script>
     import CardComponent from '../components/CardComponent'
-    import Tiles from '../components/Tiles'
+    import api from '../http/api'
 
     export default {
         name: "NewCustomer",
         components: {
-            CardComponent,
-            Tiles
+            CardComponent
         },
         data () {
             return {
+                form: {
+                    lastName: null,
+                    firstName: null,
+                    email: null
+                }
+            }
+        },
+        methods: {
+            async save() {
+                await api.post('customers', this.form).then(response => {
+                    this.$buefy.toast.open({
+                        message: response.data.message,
+                        type: 'is-success',
+                        position: 'is-bottom',
+                        duration: 3000
+                    });
 
+                    this.$router.push('/customers')
+                }).catch(error => {
+                    this.$buefy.toast.open({
+                        message: error.response.data.message,
+                        type: 'is-danger',
+                        position: 'is-bottom',
+                        duration: 3000
+
+                    })
+                })
             }
         }
     }

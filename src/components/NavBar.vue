@@ -6,20 +6,20 @@
         <b-icon :icon="menuToggleMobileIcon"/>
       </a>
 
-     <!-- <div class="navbar-item is-expanded">
+     <div class="navbar-item is-expanded">
         <b-autocomplete
                 rounded
                 v-model="name"
                 :data="filteredDataArray"
-                placeholder="e.g. jQuery"
+                placeholder="Buscar"
                 icon="magnify"
                 expanded="true"
                 clearable
                 @select="option => selected = option">
-          <template slot="empty">No results found</template>
+          <template slot="empty">Sem resultados</template>
         </b-autocomplete>
       </div>
-      !-->
+
     </div>
 
       <div class="navbar-brand is-right">

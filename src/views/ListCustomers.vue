@@ -2,8 +2,8 @@
   <div>
     <section class="section is-main-section">
 
-      <card-component class="has-table has-mobile-sort-spaced" title="Clientes" icon="account-multiple" :header="cardHeader">
-        <clients-table-sample data-url="/data-sources/clients.json" :checkable="true"/>
+      <card-component class="has-table has-mobile-sort-spaced" title="Clientes" icon="account-multiple" :header="buttonHeader">
+        <customer-table data-url="customers" :checkable="true"/>
       </card-component>
 
     </section>
@@ -12,14 +12,18 @@
 </template>
 
 <script>
-import ClientsTableSample from '../components/ClientsTableSample'
+import CustomerTable from '../components/CustomerTable'
 import CardComponent from '../components/CardComponent'
+
 export default {
   name: 'Tables',
-  components: {CardComponent, ClientsTableSample},
+  components: {
+    CardComponent,
+    CustomerTable
+  },
   data () {
     return {
-      cardHeader: {
+      buttonHeader: {
         to: '/customer/new',
         icon: 'account-plus',
         name: 'Novo'
