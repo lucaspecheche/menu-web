@@ -10,10 +10,10 @@
         <b-autocomplete
                 rounded
                 v-model="name"
-                :data="filteredDataArray"
+                :data="{}"
                 placeholder="Buscar"
                 icon="magnify"
-                expanded="true"
+                :expanded="true"
                 clearable
                 @select="option => selected = option">
           <template slot="empty">Sem resultados</template>

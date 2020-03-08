@@ -16,7 +16,7 @@ import CustomerTable from '../components/CustomerTable'
 import CardComponent from '../components/CardComponent'
 
 export default {
-  name: 'Tables',
+  name: 'ListCustomers',
   components: {
     CardComponent,
     CustomerTable

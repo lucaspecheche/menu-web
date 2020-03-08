@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path: '/customers',
-      name: 'tables',
+      name: 'customers',
       component: () => import('../views/ListCustomers')
     },
     {
@@ -21,7 +21,18 @@ export default new Router({
       name: 'customer.edit',
       props: true,
       component: () => import('../views/EditCustomer')
-    }
+    },
+    {
+      path: '/orders',
+      name: 'orders',
+      props: true,
+      component: () => import('../views/order/ListOrders')
+    },
+    {
+      path: '/order/new',
+      name: 'order.new',
+      component: () => import('../views/order/NewOrder')
+    },
   ],
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {

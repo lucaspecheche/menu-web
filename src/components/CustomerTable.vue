@@ -29,7 +29,7 @@
             <router-link :to="{name:'customer.edit', params: {id: props.row.id}}" class="button is-small is-primary">
               <b-icon icon="account-edit" size="is-small"/>
             </router-link>
-            <b-button class="button is-small is-danger" type="button" :loading="isDeleting" @click.prevent="deleteCustomer(props.row.id)">
+            <b-button class="button is-small is-danger" type="button" :loading="isDeleting === props.row.id" @click.prevent="deleteCustomer(props.row.id)">
               <b-icon icon="trash-can" size="is-small"/>
             </b-button>
           </div>
@@ -110,7 +110,7 @@ export default {
         })
     },
     deleteCustomer(id) {
-      this.isDeleting = true;
+      this.isDeleting = id;
 
       api.delete(`customers/${id}`).then(response => {
         const index = this.customers.findIndex(customer => customer.id === id)
