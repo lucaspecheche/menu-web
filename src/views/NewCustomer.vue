@@ -2,36 +2,7 @@
     <div>
         <section class="section is-main-section">
             <card-component title="Novo Cliente" icon="account-plus" class="tile is-child">
-                <form @submit.prevent="save">
-                    <b-field grouped>
-                        <b-field label="Nome" expanded>
-                            <b-input v-model="form.firstName" icon="account" type="text" placeholder="Lucas" name="name" required />
-                        </b-field>
-
-                        <b-field label="Sobrenome" expanded>
-                            <b-input v-model="form.lastName" icon="account" type="text" placeholder="Lima" name="email" required />
-                        </b-field>
-
-                    </b-field>
-
-                    <b-field label="E-mail" expanded="">
-                        <b-input v-model="form.email" icon="email" type="email" placeholder="menu@mail.com" name="email" required />
-                    </b-field>
-
-                    <hr>
-                    <b-field grouped position="is-right">
-                        <div class="control">
-                            <b-button tag="router-link" to="/customers" type="is-light" icon-left="account-cancel" >
-                                Cancelar
-                            </b-button>
-                        </div>
-                        <div class="control">
-                            <b-button native-type="submit" type="is-link" icon-left="content-save" >
-                                Salvar
-                            </b-button>
-                        </div>
-                    </b-field>
-                </form>
+                <customer-form @save="save"></customer-form>
             </card-component>
         </section>
     </div>
@@ -39,41 +10,21 @@
 
 <script>
     import CardComponent from '../components/CardComponent'
-    import api from '../http/api'
+    import CustomerForm from '../components/CustomerForm'
 
     export default {
         name: "NewCustomer",
         components: {
-            CardComponent
-        },
-        data () {
-            return {
-                form: {
-                    lastName: null,
-                    firstName: null,
-                    email: null
-                }
-            }
+            CardComponent,
+            CustomerForm
         },
         methods: {
-            async save() {
-                await api.post('customers', this.form).then(response => {
-                    this.$buefy.toast.open({
-                        message: response.data.message,
-                        type: 'is-success',
-                        position: 'is-bottom',
-                        duration: 3000
-                    });
-
+            save(data) {
+                this.$store.dispatch('customers/save', data).then(response => {
+                    this.toastSucces(response.data?.message);
                     this.$router.push('/customers')
                 }).catch(error => {
-                    this.$buefy.toast.open({
-                        message: error.response.data.message,
-                        type: 'is-danger',
-                        position: 'is-bottom',
-                        duration: 3000
-
-                    })
+                    this.toastError(error.response?.data?.message)
                 })
             }
         }

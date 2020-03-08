@@ -2,17 +2,17 @@
     <form @submit.prevent="save">
         <b-field grouped>
             <b-field label="Nome" expanded>
-                <b-input v-model="form.firstName" icon="account" type="text" placeholder="Lucas" name="name" required />
+                <b-input v-model="data.firstName" icon="account" type="text" placeholder="Lucas" name="name" required />
             </b-field>
 
             <b-field label="Sobrenome" expanded>
-                <b-input v-model="form.lastName" icon="account" type="text" placeholder="Lima" name="email" required />
+                <b-input v-model="data.lastName" icon="account" type="text" placeholder="Lima" name="email" required />
             </b-field>
 
         </b-field>
 
         <b-field label="E-mail" expanded>
-            <b-input v-model="form.email" icon="email" type="email" placeholder="menu@mail.com" name="email" required />
+            <b-input v-model="data.email" icon="email" type="email" placeholder="menu@mail.com" name="email" required />
         </b-field>
 
         <hr>
@@ -35,7 +35,7 @@
     export default {
         name: "CustomerForm",
         props: {
-            form: {
+            data: {
                 type: Object,
                 default: () => {
                     return {
@@ -53,16 +53,16 @@
         },
         methods: {
             save() {
-                if(this.initialEmail === this.form.email) {
-                    delete this.form.email
+                if(this.initialEmail === this.data.email) {
+                    delete this.data.email
                 }
 
-                this.$emit('save', this.form)
+                this.$emit('save', this.data)
             }
         },
         created() {
             setTimeout(() => {
-                this.initialEmail = this.form.email
+                this.initialEmail = this.data.email
             }, 500)
 
         }

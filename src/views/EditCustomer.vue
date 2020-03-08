@@ -2,7 +2,7 @@
     <div>
         <section class="section is-main-section">
             <card-component title="Novo Cliente" icon="account-plus" class="tile is-child">
-                <customer-form :form="form" @save="update"></customer-form>
+                <customer-form :data="data" @save="update"></customer-form>
             </card-component>
         </section>
     </div>
@@ -22,7 +22,7 @@
         props: ['id'],
         data() {
             return {
-                form: {
+                data: {
                     lastName: null,
                     firstName: null,
                     email: null
@@ -33,34 +33,20 @@
             this.getCustomer()
         },
         methods: {
-            async getCustomer() {
-               await api.get(`customers/${this.id}`).then(response => {
-                   this.form = response.data.data
+            getCustomer() {
+               api.get(`customers/${this.id}`).then(response => {
+                   this.data = response.data.data
                }).catch(error => {
-                   this.$buefy.toast.open({
-                       message: error.response.data.message,
-                       type: 'is-danger',
-                       position: 'is-bottom',
-                       duration: 3000
-                   })
+                   this.toastError(error.response?.data?.message);
+
                })
             },
-            async update(attr) {
-                await api.put(`customers/${this.id}`, attr).then(response => {
-                    this.$buefy.toast.open({
-                        message: response.data.message,
-                        type: 'is-success',
-                        position: 'is-bottom',
-                        duration: 3000
-                    });
+            update(attr) {
+                api.put(`customers/${this.id}`, attr).then(response => {
+                    this.toastSucces(response.data?.message);
                     this.$router.push('/customers')
                 }).catch(error => {
-                    this.$buefy.toast.open({
-                        message: error.response.data.message,
-                        type: 'is-danger',
-                        position: 'is-bottom',
-                        duration: 3000
-                    })
+                    this.toastError(error.response?.data?.message);
                 })
             }
         }
