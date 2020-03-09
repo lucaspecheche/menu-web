@@ -30,15 +30,14 @@
             }
         },
         created() {
-            this.getCustomer()
+            this.getOrder()
         },
         methods: {
-            getCustomer() {
+            getOrder() {
                api.get(`customers/${this.id}`).then(response => {
                    this.data = response.data.data
                }).catch(error => {
                    this.toastError(error.response?.data?.message);
-
                })
             },
             update(attr) {

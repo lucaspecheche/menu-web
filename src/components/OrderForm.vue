@@ -1,24 +1,25 @@
 <template>
     <form @submit.prevent="save">
         <b-field grouped>
-            <autocomplete label="Cliente" :data="customersAvailable" field="name" @selected="customerSelected"/>
+
+            <autocomplete :current="currentCustomer" label="Cliente" :form="customersAvailable" field="name" @selected="customerSelected"/>
 
             <b-field label="Valor" expanded>
-                <b-input v-model="data.value" icon="currency-brl" type="number" step="any" placeholder="00,00" name="name" required />
+                <b-input v-model="currentOrder.value" icon="currency-brl" type="number" step="any" placeholder="00,00" name="name" required></b-input>
             </b-field>
         </b-field>
 
         <b-field grouped>
-            <autocomplete label="Status" :data="statusAvailable" field="name" @selected="statusSelected"/>
+            <autocomplete :current="currentStatus" label="Status" :form="statusAvailable" field="name" @selected="statusSelected"/>
 
             <b-field label="Data do Pedido" expanded required>
                 <b-datepicker
-                        v-model="data.date"
+                        v-model="currentOrder.date"
                         placeholder="Selecione..."
                         icon="calendar-today"
                         >
                     <b-button class="button is-primary"
-                            @click="data.date = new Date()" expanded>
+                            @click="currentOrder.date = new Date()" expanded>
                         <b-icon icon="calendar-today"></b-icon>
                         <span>Hoje</span>
                     </b-button>
@@ -43,52 +44,54 @@
 </template>
 
 <script>
-    import BField from "buefy/src/components/field/Field";
     import Autocomplete from '../components/Autocomplete'
+    import {mapState} from "vuex";
 
     export default {
         name: "OrderForm",
-        components: {BField, Autocomplete},
-        props: {
-            data: {
-                type: Object,
-                default: () => {
-                    return {
-                        value: null,
-                        status: null,
-                        customerId: null,
-                        date: null
-                    }
-                }
-            },
-            customersAvailable: Array,
-            statusAvailable: Array
+        components: {
+            Autocomplete
         },
         data () {
             return {
-                initialEmail: null,
+                order: {
+                    value: null,
+                    status: null,
+                    customerId: null,
+                    date: null
+                }
             }
         },
         computed: {
+            ...mapState({
+                customersAvailable: state => state.customers.available,
+                statusAvailable: state => state.orders.statusAvailable,
+                currentOrder: state => state.orders.current
+            }),
+            currentStatus () {
+                return this.statusAvailable.find(({ value }) => value == this.currentOrder?.status)
+            },
+            currentCustomer () {
+                return this.customersAvailable.find(({ id }) => id == this.currentOrder?.customerId)
+            },
             canSave() {
-                for(const key in this.data) {
-                    if(this.data[key] === null) {
-                        return false;
-                    }
-                }
-                return true;
+                const order = this.currentOrder;
+                return order.date && order.customerId &&  order.value && order.status;
             }
         },
         methods: {
             save() {
-                this.$emit('save', this.data)
+                this.$emit('save', this.currentOrder)
             },
             customerSelected(customer) {
-                this.data.customerId = customer.id
+                this.currentOrder.customerId = customer.id
             },
             statusSelected(status) {
-                this.data.status = status.value
+                this.currentOrder.status = status.value
             }
+        },
+        beforeDestroy() {
+            this.$store.dispatch('orders/reset')
         }
     }
 </script>

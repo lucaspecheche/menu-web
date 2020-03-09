@@ -30,8 +30,14 @@ export default new Router({
     },
     {
       path: '/order/new',
-      name: 'order.new',
+      name: 'orders.js.new',
       component: () => import('../views/order/NewOrder')
+    },
+    {
+      path: '/orders/:id',
+      name: 'orders.js.edit',
+      props: true,
+      component: () => import('../views/order/EditOrder')
     },
   ],
   scrollBehavior (to, from, savedPosition) {

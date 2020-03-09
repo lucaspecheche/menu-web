@@ -4,26 +4,32 @@ const url = 'customers';
 export default {
     namespaced: true,
     state: {
-        isLoading: false,
         data: {
-            firstName: null,
-            lastName: null,
-            email: null
-        }
+            id: null,
+            name: '',
+            firstName: '',
+            lastName: '',
+            email: ''
+        },
+        available: []
     },
     mutations: {
-        SET_LOADING_STATUS(state) {
-            state.isLoading = state
-        },
-
-        SET_DATA(state, payload) {
-            state.data = payload
+        SET_AVAILABLE(state, payload) {
+            state.available = payload
         }
     },
     actions: {
-        fetch(context) {
-            context.commit('SET_LOADING_STATUS')
-            alert('VALeu')
+        available(context) {
+            api.get('customers').then(response => {
+                 const map =  response.data.data.map(customer => {
+                    customer.name = `${customer.firstName} ${customer.lastName}`
+                    return customer;
+                });
+
+                context.commit('SET_AVAILABLE', map)
+            }).catch(error => {
+                this.toastError(error.response.data.message)
+            })
         },
         save(context, payload) {
             return api.post(url, payload);

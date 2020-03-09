@@ -2,9 +2,7 @@
     <div>
         <section class="section is-main-section">
             <card-component title="Novo Pedido" icon="cart-plus" class="tile is-child">
-                <order-form :statusAvailable="statusAvailable" :customers-available="customersAvailable" @save="save">
-
-                </order-form>
+                <order-form @save="save"/>
             </card-component>
         </section>
     </div>
@@ -21,27 +19,8 @@
             CardComponent,
             OrderForm
         },
-        data () {
-            return {
-                statusAvailable: [
-                    {
-                        'name': 'Pendente',
-                        'value': 'PENDING'
-                    },
-                    {
-                        'name': 'Aprovado',
-                        'value': 'APPROVED'
-                    },
-                    {
-                        'name': 'Cancelado',
-                        'value': 'CANCELLED'
-                    }
-                ],
-                customersAvailable: []
-            }
-        },
-        created () {
-          this.fetchCustomer()
+        mounted () {
+            this.$store.dispatch('customers/available');
         },
         methods: {
             save(data) {
@@ -50,17 +29,6 @@
                     this.$router.push('/orders')
                 }).catch(error => {
                     this.toastError(error.response?.data?.message)
-                })
-            },
-            fetchCustomer() {
-                api.get('customers').then(response => {
-                    this.customersAvailable = response.data.data.map(customer => {
-                        customer.name = `${customer.firstName} ${customer.lastName}`
-                        return customer;
-                    });
-
-                }).catch(error => {
-                    this.toastError(error.response.data.message)
                 })
             }
         }
