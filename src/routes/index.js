@@ -7,6 +7,11 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      name: 'dashboard',
+      component: () => import('../views/Dashboard')
+    },
+    {
       path: '/customers',
       name: 'customers',
       component: () => import('../views/customer/ListCustomers')

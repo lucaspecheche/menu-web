@@ -9,8 +9,6 @@
      <div class="navbar-item is-expanded">
         <b-autocomplete
                 rounded
-                v-model="name"
-                :data="{}"
                 placeholder="Buscar"
                 icon="magnify"
                 :expanded="true"
@@ -89,12 +87,6 @@ export default {
     },
     menuNavBarToggle () {
       this.isMenuNavBarActive = (!this.isMenuNavBarActive)
-    },
-    logout () {
-      this.$buefy.snackbar.open({
-        message: 'Log out clicked',
-        queue: false
-      })
     }
   }
 }
