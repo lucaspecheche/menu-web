@@ -46,8 +46,6 @@ export default {
         current(context, id) {
             api.get(`orders/${id}`).then(response => {
                 context.commit('SET_CURRENT', response.data.data)
-            }).catch(error => {
-                this.toastError(error.response?.data?.message)
             })
         },
         save(context, payload) {

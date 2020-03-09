@@ -11,7 +11,6 @@
 <script>
     import CardComponent from '@/components/CardComponent'
     import OrderForm from '../../components/OrderForm'
-    import api from '@/http/api'
 
     export default {
         name: "NewOrder",
@@ -24,7 +23,7 @@
         },
         methods: {
             save(data) {
-                api.post('orders', data).then(response => {
+                this.$store.dispatch('orders/save', data).then(response => {
                     this.toastSucces(response.data?.message);
                     this.$router.push('/orders')
                 }).catch(error => {

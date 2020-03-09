@@ -9,9 +9,9 @@
 </template>
 
 <script>
-    import CardComponent from '../components/CardComponent'
-    import CustomerForm from '../components/CustomerForm'
-    import api from '../http/api'
+    import CardComponent from '../../components/CardComponent'
+    import CustomerForm from '../../components/CustomerForm'
+    import api from '../../http/api'
 
     export default {
         name: "EditCustomer",

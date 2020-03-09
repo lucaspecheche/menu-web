@@ -1,11 +1,9 @@
 <template>
     <div>
         <section class="section is-main-section">
-
             <card-component class="has-table has-mobile-sort-spaced" title="Pedidos" icon="cart" :header="buttonHeader">
                 <order-table/>
             </card-component>
-
         </section>
     </div>
 

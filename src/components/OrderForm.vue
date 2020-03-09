@@ -30,7 +30,7 @@
         <hr>
         <b-field grouped position="is-right">
             <div class="control">
-                <b-button tag="router-link" to="/customers" type="is-light" icon-left="cart-off" >
+                <b-button tag="router-link" to="/orders" type="is-light" icon-left="cart-off" >
                     Cancelar
                 </b-button>
             </div>

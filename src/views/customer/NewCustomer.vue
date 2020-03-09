@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import CardComponent from '../components/CardComponent'
-    import CustomerForm from '../components/CustomerForm'
+    import CardComponent from '../../components/CardComponent'
+    import CustomerForm from '../../components/CustomerForm'
 
     export default {
         name: "NewCustomer",

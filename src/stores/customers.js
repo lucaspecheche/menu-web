@@ -27,8 +27,6 @@ export default {
                 });
 
                 context.commit('SET_AVAILABLE', map)
-            }).catch(error => {
-                this.toastError(error.response.data.message)
             })
         },
         save(context, payload) {

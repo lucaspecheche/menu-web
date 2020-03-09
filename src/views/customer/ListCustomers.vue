@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import CustomerTable from '../components/CustomerTable'
-import CardComponent from '../components/CardComponent'
+import CustomerTable from '../../components/CustomerTable'
+import CardComponent from '../../components/CardComponent'
 
 export default {
   name: 'ListCustomers',

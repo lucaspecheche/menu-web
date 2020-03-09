@@ -9,18 +9,18 @@ export default new Router({
     {
       path: '/customers',
       name: 'customers',
-      component: () => import('../views/ListCustomers')
+      component: () => import('../views/customer/ListCustomers')
     },
     {
       path: '/customer/new',
       name: 'customer.new',
-      component: () => import('../views/NewCustomer')
+      component: () => import('../views/customer/NewCustomer')
     },
     {
       path: '/customers/:id',
       name: 'customer.edit',
       props: true,
-      component: () => import('../views/EditCustomer')
+      component: () => import('../views/customer/EditCustomer')
     },
     {
       path: '/orders',
@@ -30,12 +30,12 @@ export default new Router({
     },
     {
       path: '/order/new',
-      name: 'orders.js.new',
+      name: 'orders.new',
       component: () => import('../views/order/NewOrder')
     },
     {
       path: '/orders/:id',
-      name: 'orders.js.edit',
+      name: 'orders.edit',
       props: true,
       component: () => import('../views/order/EditOrder')
     },
