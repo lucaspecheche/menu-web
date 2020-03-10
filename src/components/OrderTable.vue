@@ -25,7 +25,7 @@
                     {{ props.row.customer.firstName }} {{props.row.customer.lastName}}
                 </b-table-column>
                 <b-table-column label="Data">
-                    <small class="has-text-grey is-abbr-like">{{ props.row.createdAt }}</small>
+                   {{ (new Date(props.row.createdAt)).toDateString()}}
                 </b-table-column>
                 <b-table-column custom-key="actions" class="is-actions-cell">
                     <div class="buttons is-right">

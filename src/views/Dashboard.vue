@@ -1,158 +1,113 @@
 <template>
     <div id="chart">
         <section class="section is-main-section">
-            <card-component title="Performance" icon="chart-bell-curve" class="tile is-child">
-            <vue-apex-charts type="line" height="350" :options="chartOptions" :series="series"></vue-apex-charts>
+            <card-component title="Filtros" icon="magnify">
+                <b-field grouped>
+                    <b-field label="Datas" label-position="on-border" expanded>
+                        <b-datepicker
+                                v-model="dates"
+                                placeholder="Clique para selecionar"
+                                range>
+
+                            <button class="button is-danger"
+                                    @click="dates = []">
+                                <b-icon icon="close"></b-icon>
+                                <span>Limpar</span>
+                            </button>
+                        </b-datepicker>
+                    </b-field>
+
+                    <b-field label="Status" label-position="on-border" expanded>
+                        <b-autocomplete
+                                placeholder="Selecione..."
+                                :keep-first="true"
+                                :open-on-focus="true"
+                                field="user.first_name">
+                        </b-autocomplete>
+                    </b-field>
+                    <p class="control">
+                        <button class="button is-primary">Aplicar</button>
+                    </p>
+                </b-field>
             </card-component>
+
+            <tiles>
+                <card-widget class="tile is-child" type="is-primary" icon="account-multiple" :number="totalCustomers" label="Clientes"/>
+                <card-widget class="tile is-child" type="is-info" icon="cart-outline" :number="totalOrders" label="Pedidos"/>
+            </tiles>
+
+            <card-component title="Performance" icon="chart-bell-curve">
+                <orders-by-day :day-series="daySeries" :day-categories="dayCategories"/>
+            </card-component>
+
+            <tiles>
+                <card-component title="Produtos" icon="chart-pie" class="tile is-child">
+                    <orders-by-status :status-labels="statusLabels" :status-series="statusSeries"/>
+                </card-component>
+                <card-component title="Status" icon="chart-pie" class="tile is-child">
+                    <orders-by-status/>
+                </card-component>
+            </tiles>
         </section>
     </div>
 </template>
 
 <script>
-    import VueApexCharts from 'vue-apexcharts'
+    import OrdersByDay from '../components/charts/OrdersByDay'
+    import OrdersByStatus from '../components/charts/OrderByStatus'
     import CardComponent from '../components/CardComponent'
-    //import config from './LineChart'
-    import api from '../http/api'
+    import CardWidget from '../components/CardWidget'
+    import Tiles from '../components/Tiles'
+    import {mapState} from "vuex";
+    import BField from "buefy/src/components/field/Field";
 
     export default {
         name: 'Dashboard',
         components: {
-            VueApexCharts, CardComponent
+            BField,
+            OrdersByDay,
+            OrdersByStatus,
+            CardComponent,
+            CardWidget,
+            Tiles,
         },
         data () {
             return {
-                series: [],
-                chartOptions: {
-                    chart: {
-                        defaultLocale: 'pt-br',
-                        locales:[{
-                            "name": "pt-br",
-                            "options": {
-                                "months": [
-                                    "Janeiro",
-                                    "Fevereiro",
-                                    "Março",
-                                    "Abril",
-                                    "Maio",
-                                    "Junho",
-                                    "Julho",
-                                    "Agosto",
-                                    "Setembro",
-                                    "Outubro",
-                                    "Novembro",
-                                    "Dezembro"
-                                ],
-                                "shortMonths": [
-                                    "Jan",
-                                    "Fev",
-                                    "Mar",
-                                    "Abr",
-                                    "Mai",
-                                    "Jun",
-                                    "Jul",
-                                    "Ago",
-                                    "Set",
-                                    "Out",
-                                    "Nov",
-                                    "Dez"
-                                ],
-                                "days": [
-                                    "Domingo",
-                                    "Segunda",
-                                    "Terça",
-                                    "Quarta",
-                                    "Quinta",
-                                    "Sexta",
-                                    "Sábado"
-                                ],
-                                "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
-                                "toolbar": {
-                                    "exportToSVG": "Baixar SVG",
-                                    "exportToPNG": "Baixar PNG",
-                                    "exportToCSV": "Baixar CSV",
-                                    "menu": "Menu",
-                                    "selection": "Selecionar",
-                                    "selectionZoom": "Selecionar Zoom",
-                                    "zoomIn": "Aumentar",
-                                    "zoomOut": "Diminuir",
-                                    "pan": "Navegação",
-                                    "reset": "Reiniciar Zoom"
-                                }
-                            }
-                        }],
-                        height: 350,
-                        type: 'line',
-                    },
-                    stroke: {
-                        width: 7,
-                        curve: 'smooth'
-                    },
-                    xaxis: {
-                        type: 'datetime',
-                        categories: [],
-                    },
-                    title: {
-                        align: 'left',
-                        style: {
-                            fontSize: "16px",
-                            color: '#666'
-                        }
-                    },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shade: 'dark',
-                            gradientToColors: [ '#FDD835'],
-                            shadeIntensity: 1,
-                            type: 'horizontal',
-                            opacityFrom: 1,
-                            opacityTo: 1,
-                            stops: [0, 100, 100, 100]
-                        },
-                    },
-                    markers: {
-                        size: 4,
-                        colors: ["#FFA41B"],
-                        strokeColors: "#fff",
-                        strokeWidth: 2,
-                        hover: {
-                            size: 7,
-                        }
-                    },
-                    yaxis: {
-                        min: -10,
-                        max: 40,
-                        title: {
-                            text: 'Vendas',
-                        },
-                    }
-                },
+                dates: [],
+                filters: []
             }
         },
         created() {
-            this.getData()
+            this.fetch()
+        },
+        computed: {
+            ...mapState('reports', {
+                totalCustomers: state => state.total.customers,
+                totalOrders: state => state.total.orders,
+                statusSeries: state => state.ordersByStatus.series,
+                statusLabels: state => state.ordersByStatus.labels,
+                daySeries: state => state.ordersByDay.series,
+                dayCategories: state => state.ordersByDay.categories
+            })
         },
         methods: {
-            getData () {
-                api.get('report').then(response => {
-                    console.log(response.data.categories)
-
-                    this.chartOptions = {...this.chartOptions, ...{
-                            xaxis: {
-                                type: 'datetime',
-                                categories: response.data.categories,
-                            }
-                        }};
-
-                    this.series = [{
-                        name: 'Panelas',
-                        data: response.data.data
-                    }]
-
-                    //console.log( this.chartOptions.xaxis, this.series)
-                })
+              fetch() {
+                  this.$store.dispatch('reports/ordersByDay');
+                  this.$store.dispatch('reports/ordersByStatus');
+                  this.$store.dispatch('reports/total');
+              }
+        },
+        watch: {
+            dates (newValue) {
+                if(newValue.length) {
+                    this.$store.dispatch('reports/total', {
+                        startDate: newValue[0],
+                        endDate: newValue[1]
+                    });
+                }else {
+                    this.$store.dispatch('reports/total');
+                }
             }
         }
-
     }
 </script>

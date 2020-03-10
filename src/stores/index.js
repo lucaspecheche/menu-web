@@ -3,13 +3,15 @@ import Vuex from 'vuex'
 
 import customers from './customers'
 import orders from './orders'
+import reports from './reports'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     customers,
-    orders
+    orders,
+    reports
   },
   state: {
     /* User */
