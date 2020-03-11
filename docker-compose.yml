@@ -1,15 +1,10 @@
-version: '3'
-
+version: "3"
 services:
   web:
-    container_name: web
+    container_name: menu-web
     build:
-      context: docker/server
+      context: .
       dockerfile: Dockerfile
-    volumes:
-      - ".:/menu-web"
-      - "./node_modules:/menu-web/node_modules"
-      - "./package.json:/menu-web/package.json"
-      - "./package-lock.json:/menu-web/package-lock.json"
     ports:
-      - '8001:8080'
+      - "8001:8080"
+    command: /bin/sh -c "yarn serve"
