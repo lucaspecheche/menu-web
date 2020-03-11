@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
   web:
@@ -7,7 +7,8 @@ services:
       context: docker/server
       dockerfile: Dockerfile
     volumes:
-      - '.:/menu-web'
+      - ".:/menu-web"
+      - "./node_modules:/menu-web/node_modules"
       - "./package.json:/menu-web/package.json"
       - "./package-lock.json:/menu-web/package-lock.json"
     ports:
