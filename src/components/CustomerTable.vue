@@ -22,7 +22,7 @@
           {{ props.row.email }}
         </b-table-column>
         <b-table-column label="Cadastrado">
-          <small class="has-text-grey is-abbr-like">{{ props.row.createdAt }}</small>
+          {{ format(new Date(props.row.createdAt), "dd MMM yy - HH'h'mm", {locale: locale}) }}
         </b-table-column>
         <b-table-column custom-key="actions" class="is-actions-cell">
           <div class="buttons is-right">
@@ -57,7 +57,9 @@
 </template>
 
 <script>
-import api from "../http/api";
+  import { format } from 'date-fns'
+  import locale from 'date-fns/locale/pt-BR';
+  import api from "../http/api";
 
 export default {
   name: 'CustomerTable',
@@ -73,6 +75,8 @@ export default {
   },
   data () {
     return {
+      format,
+      locale,
       customers: [],
       isLoading: false,
       isDeleting: false,

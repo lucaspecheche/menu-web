@@ -16,7 +16,7 @@
 
             <template slot-scope="props">
                 <b-table-column label="Status" field="firstName" sortable>
-                    {{ props.row.status }}
+                    {{ translateStatus(props.row.status) }}
                 </b-table-column>
                 <b-table-column label="Valor" field="lastName" sortable>
                     {{ props.row.value }}
@@ -25,7 +25,7 @@
                     {{ props.row.customer.firstName }} {{props.row.customer.lastName}}
                 </b-table-column>
                 <b-table-column label="Data">
-                   {{ (new Date(props.row.createdAt)).toDateString()}}
+                   {{ format(new Date(props.row.createdAt), "dd MMM yy - HH'h'mm", {locale: locale})}}
                 </b-table-column>
                 <b-table-column custom-key="actions" class="is-actions-cell">
                     <div class="buttons is-right">
@@ -61,6 +61,8 @@
 
 <script>
     import api from "../http/api";
+    import { format } from 'date-fns'
+    import locale from 'date-fns/locale/pt-BR';
 
     export default {
         name: 'OrderTable',
@@ -68,6 +70,8 @@
         },
         data () {
             return {
+                format,
+                locale,
                 orders: [],
                 isLoading: false,
                 isDeleting: false,
@@ -79,6 +83,11 @@
         },
         mounted () {
             this.loadAsyncData()
+        },
+        computed: {
+            availableStatus() {
+                return this.$store.state.orders.statusAvailable
+            }
         },
         methods: {
             loadAsyncData() {
@@ -111,6 +120,9 @@
             onPageChange (page) {
                 this.page = page;
                 this.loadAsyncData()
+            },
+            translateStatus(value) {
+                return this.availableStatus.find(status => status.value === value)['name']
             }
         }
     }
