@@ -133,6 +133,8 @@
                     this.filters.status = newValue.map((status) => {
                         return status.value
                     })
+                }else {
+                    this.filters.status = null
                 }
             }
         }
