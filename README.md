@@ -1,24 +1,18 @@
-# menu
+<p align="center">
+  <img src="https://menu.com.vc/media/store/logo/websites/1/Imagem1.png" width="200">
+</p>
 
-## Project setup
-```
-npm install
-```
+<hr>
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+**Desafio:** [Menu FullStack Challenge](https://github.com/ztech-company/fullstack-challenge)
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+**Ferramentas Utilizadas:**
+ - Framework [Vue](https://vuejs.org);
+ - UI components [Buefy](https://buefy.org)
+ - Theme [Admin One](https://admin-one-vue-cli.justboil.me/);
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### Instalação e Configurações
+- `docker-compose up -d --build` server será iniciado na porta `8001`
+
+Agora vamos lá ver: [Seguir para o App](http://localhost:8001)
