@@ -15,3 +15,17 @@
 - `docker-compose up -d --build` server será iniciado na porta `8001`
 
 Agora vamos lá ver: [Seguir para o App](http://localhost:8001)
+
+
+#### Backlog:
+- Adicionar resources de produtos;
+- Criar filtros para clientes e pedidos;
+- Ajustar barra de pesquisa global;
+- Confirmar e-mail;
+- Pedir endereço do cliente e fazer integração para consulta de CEP;
+- Apresentar erros em Modal com mais informações;
+- Criar CI com Git Actions;
+- Migrar para Mysql (gg)
+- Criar coleções utilizando MongoDB para os Pedidos;
+- Criar relatórios por produtos mais vendidos.
+- Criar relatórios de cliente/pedidos.
