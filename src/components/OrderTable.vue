@@ -99,7 +99,7 @@
                     this.total   = data.total;
 
                 }).catch(e => {
-                    this.toastError(e.response?.data.message)
+                    this.toastError(e.response?.data.message ?? 'Não foi possivel conectar com a API')
                 }).finally(() => {
                     this.isLoading = false;
                 })

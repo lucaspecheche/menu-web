@@ -30,20 +30,11 @@
       <div class="navbar-end">
 
         <nav-bar-menu class="has-divider has-user-avatar">
-          <user-avatar/>
+          <div class="is-user-avatar">
+            <img :src="userAvatar" :alt="userName">
+          </div>
           <div class="is-user-name">
             <span>{{ userName }}</span>
-          </div>
-
-          <div slot="dropdown" class="navbar-dropdown">
-            <a class="navbar-item">
-              <b-icon icon="account" custom-size="default"></b-icon>
-              <span>Meu Perfil</span>
-            </a>
-            <a class="navbar-item">
-              <b-icon icon="settings" custom-size="default"></b-icon>
-              <span>Configurações</span>
-            </a>
           </div>
         </nav-bar-menu>
 
@@ -55,12 +46,10 @@
 <script>
 import { mapState } from 'vuex'
 import NavBarMenu from '../components/NavBarMenu'
-import UserAvatar from '../components/UserAvatar'
 
 export default {
   name: 'NavBar',
   components: {
-    UserAvatar,
     NavBarMenu
   },
   data () {
@@ -78,7 +67,8 @@ export default {
     ...mapState([
       'isNavBarVisible',
       'isAsideMobileExpanded',
-      'userName'
+      'userName',
+      'userAvatar'
     ])
   },
   methods: {

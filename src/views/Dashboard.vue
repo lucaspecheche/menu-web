@@ -7,6 +7,7 @@
                         <b-datepicker
                                 v-model="dates"
                                 placeholder="Clique para selecionar"
+                                icon="calendar-today"
                                 range>
 
                             <button class="button is-danger"
@@ -18,15 +19,20 @@
                     </b-field>
 
                     <b-field label="Status" label-position="on-border" expanded>
-                        <b-autocomplete
-                                placeholder="Selecione..."
-                                :keep-first="true"
+                        <b-taginput
+                                v-model="status"
+                                :data="filteredStatus"
+                                autocomplete
+                                :allow-new="false"
                                 :open-on-focus="true"
-                                field="user.first_name">
-                        </b-autocomplete>
+                                field="name"
+                                icon="label"
+                                @typing="getFilteredStatus"
+                                placeholder="Clique para selecionar">
+                        </b-taginput>
                     </b-field>
                     <p class="control">
-                        <button class="button is-primary">Aplicar</button>
+                        <button @click="fetch" class="button is-primary">Aplicar</button>
                     </p>
                 </b-field>
             </card-component>
@@ -41,11 +47,11 @@
             </card-component>
 
             <tiles>
-                <card-component title="Produtos" icon="chart-pie" class="tile is-child">
+                <card-component title="Status" icon="chart-pie" class="tile is-child">
                     <orders-by-status :status-labels="statusLabels" :status-series="statusSeries"/>
                 </card-component>
-                <card-component title="Status" icon="chart-pie" class="tile is-child">
-                    <orders-by-status/>
+                <card-component title="Produtos" icon="chart-pie" class="tile is-child">
+                    Em Desenvolvimento ...
                 </card-component>
             </tiles>
         </section>
@@ -73,8 +79,10 @@
         },
         data () {
             return {
+                filteredStatus: [],
                 dates: [],
-                filters: []
+                status: [],
+                filters: {}
             }
         },
         created() {
@@ -88,24 +96,43 @@
                 statusLabels: state => state.ordersByStatus.labels,
                 daySeries: state => state.ordersByDay.series,
                 dayCategories: state => state.ordersByDay.categories
-            })
+            }),
+            availableStatus() {
+                return this.$store.state.orders.statusAvailable
+            }
         },
         methods: {
               fetch() {
-                  this.$store.dispatch('reports/ordersByDay');
-                  this.$store.dispatch('reports/ordersByStatus');
-                  this.$store.dispatch('reports/total');
-              }
+                  this.$store.dispatch('reports/ordersByDay', this.filters);
+                  this.$store.dispatch('reports/ordersByStatus', this.filters);
+                  this.$store.dispatch('reports/total', this.filters);
+                  this.filteredStatus = this.availableStatus;
+              },
+            getFilteredStatus(text) {
+                this.filteredStatus = this.availableStatus.filter((option) => {
+                    return option.name
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(text.toLowerCase()) >= 0
+                })
+            }
         },
         watch: {
             dates (newValue) {
                 if(newValue.length) {
-                    this.$store.dispatch('reports/total', {
-                        startDate: newValue[0],
-                        endDate: newValue[1]
-                    });
-                }else {
-                    this.$store.dispatch('reports/total');
+                    this.filters.startDate = newValue[0]
+                    this.filters.endDate = newValue[1]
+                } else {
+                    this.filters.startDate = null;
+                    this.filters.endDate = null;
+                    this.fetch()
+                }
+            },
+            status(newValue) {
+                if(newValue.length) {
+                    this.filters.status = newValue.map((status) => {
+                        return status.value
+                    })
                 }
             }
         }

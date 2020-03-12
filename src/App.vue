@@ -41,13 +41,6 @@ export default {
         ]
       ]
     }
-  },
-  created () {
-    this.$store.commit('user', {
-      name: 'Pecheche',
-      email: 'john@example.com',
-      avatar: 'persona.jpg'
-    })
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div>
     <b-table
       :checked-rows.sync="checkedRows"
-      :checkable="checkable"
+      :checkable="true"
       :loading="isLoading"
       :paginated="paginated"
       :per-page="perPage"
@@ -63,16 +63,6 @@
 
 export default {
   name: 'CustomerTable',
-  props: {
-    dataUrl: {
-      type: String,
-      default: null
-    },
-    checkable: {
-      type: Boolean,
-      default: false
-    }
-  },
   data () {
     return {
       format,
@@ -84,7 +74,7 @@ export default {
       perPage: 10,
       checkedRows: [],
       data: []
-      }
+    }
   },
   computed: {
     customer () {
@@ -97,7 +87,7 @@ export default {
   methods: {
     fetchData() {
       this.isLoading = true;
-      api.get(this.dataUrl).then(response => {
+      api.get('customers').then(response => {
           this.isLoading = false;
 
           if (response.data && response.data.data) {
@@ -110,7 +100,7 @@ export default {
         })
         .catch(e => {
           this.isLoading = false;
-          this.toastError(e.response?.data.message)
+          this.toastError(e.response?.data.message ?? 'Não foi possivel conectar com a API')
         })
     },
     deleteCustomer(id) {
