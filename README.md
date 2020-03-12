@@ -10,7 +10,6 @@
 **Ferramentas Utilizadas:**
  - Framework [Vue](https://vuejs.org);
  - UI components [Buefy](https://buefy.org)
- - Theme [Admin One](https://admin-one-vue-cli.justboil.me/);
 
 #### Instalação e Configurações
 - `docker-compose up -d --build` server será iniciado na porta `8001`
